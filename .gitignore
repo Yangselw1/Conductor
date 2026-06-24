@@ -1,0 +1,9 @@
+# Conductor runtime state (job DB, worktrees, logs, daemon lock) — machine-local, regenerated.
+.conductor/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store

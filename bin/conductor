@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Conductor launcher — runs the package with the repo on PYTHONPATH (no install needed).
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
+exec python3 -c "import sys; sys.path.insert(0, '$HERE'); from conductor.cli import main; main()" "$@"
