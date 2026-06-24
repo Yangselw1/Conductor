@@ -60,10 +60,10 @@ In `conductor.yaml` you carve each repo into **named locks**. Narrow locks paral
 
 ```yaml
 locks:
-  mosaic-quant: { repo: mc, paths: ["services/equity/**"] }          # narrow → runs alongside others
-  prism:        { repo: mc, paths: ["api/generate-prism*"] }         # narrow
-  mc-shared:    { repo: mc, paths: ["services/gemini.ts", "api/_lib/**"] }   # coarse → blocks engine work
-  atlas-seam:   { repos: [mc, sywiki], paths: [...] }                # cross-repo contract → one owner
+  mosaic-quant: { repo: cortex-engines, paths: ["services/equity/**"] }   # narrow → runs alongside others
+  prism:        { repo: cortex-engines, paths: ["api/generate-prism*"] }  # narrow
+  mc-shared:    { repo: cortex-engines, paths: ["services/gemini.ts", "api/_lib/**"] }   # coarse → blocks engine work
+  atlas-seam:   { repos: [cortex-engines, cortex], paths: [...] }          # cross-repo contract → one owner
 ```
 
 A request acquires one or more locks (you pass `--locks`, or let the optional LLM **scout** infer

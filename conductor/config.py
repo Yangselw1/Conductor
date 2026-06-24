@@ -179,26 +179,26 @@ max_parallel: 4
 
 # 1) The repos Conductor coordinates (name -> path, absolute or relative to this file).
 repos:
-  mc:     ../macrocollision-ai-cio-2
-  sywiki: ../SYWiki
+  cortex-engines: ../cortex-engines
+  cortex:         ../cortex
 
 # 2) LOCKS — carve the codebase into ownable units. A request acquires one or more.
 #    Narrow locks parallelize; coarse/seam locks deliberately serialize the dangerous shared areas.
 locks:
-  mosaic-quant:  { repo: mc, paths: ["services/equity/**", "lib/equity/**"], desc: "Mosaic equity engine" }
-  prism:         { repo: mc, paths: ["api/generate-prism*", "services/prism-*"], desc: "PRISM engine" }
-  macro:         { repo: mc, paths: ["api/generate-macro*", "services/regime-model.ts", "services/network-contagion.ts"], desc: "MacroCollision" }
-  thesis-val:    { repo: mc, paths: ["api/generate-thesis-*", "components/Thesis*"], desc: "Thesis Validator" }
-  mc-shared:     { repo: mc, paths: ["services/gemini.ts", "api/_lib/**", "services/atlas-export.ts"], desc: "shared MC core — serializes anything touching these files; semantic breaks are caught by verify" }
-  cockpit:       { repo: sywiki, paths: ["cortex/app/**"], desc: "Cortex cockpit UI/server" }
-  engines:       { repo: sywiki, paths: ["cortex/engines/**"], desc: "Cortex engines" }
-  vault-scripts: { repo: sywiki, paths: ["cortex/vault/.atlas/**"], desc: "Atlas vault scripts/lib" }
-  atlas-seam:    { repos: [mc, sywiki], paths: ["services/*atlas*.ts", "cortex/vault/.atlas/scripts/drain_inbox.py"], desc: "the cross-repo export contract — one owner, both sides" }
+  mosaic-quant:  { repo: cortex-engines, paths: ["services/equity/**", "lib/equity/**"], desc: "Mosaic equity engine" }
+  prism:         { repo: cortex-engines, paths: ["api/generate-prism*", "services/prism-*"], desc: "PRISM engine" }
+  macro:         { repo: cortex-engines, paths: ["api/generate-macro*", "services/regime-model.ts", "services/network-contagion.ts"], desc: "MacroCollision" }
+  thesis-val:    { repo: cortex-engines, paths: ["api/generate-thesis-*", "components/Thesis*"], desc: "Thesis Validator" }
+  mc-shared:     { repo: cortex-engines, paths: ["services/gemini.ts", "api/_lib/**", "services/atlas-export.ts"], desc: "shared MC core — serializes anything touching these files; semantic breaks are caught by verify" }
+  cockpit:       { repo: cortex, paths: ["app/**"], desc: "Cortex cockpit UI/server" }
+  engines:       { repo: cortex, paths: ["engines/**"], desc: "Cortex engines" }
+  vault-scripts: { repo: cortex, paths: ["vault/.atlas/**"], desc: "Atlas vault scripts/lib" }
+  atlas-seam:    { repos: [cortex-engines, cortex], paths: ["services/*atlas*.ts", "vault/.atlas/scripts/drain_inbox.py"], desc: "the cross-repo export contract — one owner, both sides" }
 
 # 3) VERIFY — run after a worker merges, before its locks release. Per-repo + an optional cross-repo gate.
 verify:
-  mc:     "npx tsc --noEmit"
-  sywiki: "python3 cortex/index/build.py >/dev/null && python3 cortex/vault/.atlas/scripts/validate.py"
+  cortex-engines: "npx tsc --noEmit"
+  cortex:         "python3 index/build.py >/dev/null && python3 vault/.atlas/scripts/validate.py"
   # global: "your end-to-end round-trip / contract test"
 
 # 4) Each worker is a FULL headless Claude Code session (full tools, MCP, skills, model).
@@ -210,5 +210,5 @@ worker:
 scope:
   scout: false
   scout_model: claude-haiku-4-5
-  # env_file: ../macrocollision-ai-cio-2/.env   # where ANTHROPIC_API_KEY lives
+  # env_file: ../cortex-engines/.env   # where ANTHROPIC_API_KEY lives
 """
